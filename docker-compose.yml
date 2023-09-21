@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Serveur Node.js
+  server:
+    image: node:14
+    working_dir: /app/server
+    volumes:
+      - ./server:/app/server
+    ports:
+      - "5000:5000"
+    command: npm start
+    networks:
+      - server_network
+
+  # Application React - Instance 1
+  client_1:
+    image: node:14
+    working_dir: /app/client
+    volumes:
+      - ./client:/app/client
+    ports:
+      - "3001:3000"
+    command: npm start
+    networks:
+      - client_1_network
+
+  # Application React - Instance 2
+  client_2:
+    image: node:14
+    working_dir: /app/client
+    volumes:
+      - ./client:/app/client
+    ports:
+      - "3002:3000"
+    command: npm start
+    networks:
+      - client_2_network
+
+  # Base de données (par exemple, MySQL)
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: your_password
+      MYSQL_DATABASE: memory
+      MYSQL_USER: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - db_network
+
+  # Autres services (si nécessaire)
+
+networks:
+  server_network:
+  client_1_network:
+  client_2_network:
+  db_network:
+
